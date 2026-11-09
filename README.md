@@ -1,142 +1,71 @@
-<h1 align=center> typioca </h1>
+# typioca
 
-<p align=center> Minimal, terminal based typing speed tester. </p>
-<p align=center> <img alt="GitHub release (latest SemVer)" src="https://img.shields.io/github/v/release/bloznelis/typioca"> <img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/bloznelis/typioca/ci.yml"> </p>
+Минималистичный терминальный тренажёр скорости печати.
+Форк проекта [bloznelis/typioca](https://github.com/bloznelis/typioca), база —
+коммит `baf4170`, лицензия MIT.
 
-> **Tapioca** (/ˌtæpiˈoʊkə/) is a starch extracted from the storage roots of the cassava plant. Pearl tapioca is a common ingredient in Asian desserts...and sweet drinks such as **bubble tea**.
+Приложение работает локально, не требует браузера и регистрации. Встроенные
+наборы слов доступны без сети; сеть нужна только для загрузки дополнительных
+наборов и раскладок.
 
-![](https://github.com/bloznelis/typioca/blob/master/img/typioca.gif)
+## Запуск
 
-## Features
-  * Time or word/sentence count based typing speed tests
-  * Proper WPM results based on https://www.speedtypingonline.com/typing-equations
-  * Multiple word/sentence lists made out of classical books to spice your test up
-  * Cursor aware word lines
-  * Interactive menu
-  * ctrl+w support
-  * SSH server `typioca serve`
-  * Dynamic word lists
-  * Custom word lists
-  * Linux/Mac/Win support
+Требования: Go 1.22.1 или новее, GNU Make, терминал с поддержкой ANSI.
 
-## Installation
-
-[![Packaging status](https://repology.org/badge/vertical-allrepos/typioca.svg)](https://repology.org/project/typioca/versions)
-
-### AUR
-
-```
-yay -S typioca-git
+```bash
+git clone https://github.com/gitmaxlla/typioca-code.git
+cd typioca-code/src
+make build
+./execs/typioca
+./execs/typioca --version
 ```
 
-### Go
+Проверка работоспособности:
 
-```
-go install github.com/bloznelis/typioca@latest
-```
+1. Запустить `./execs/typioca` — открывается главное меню.
+2. Выбрать `Time run`, `15`, `Common words`, нажать Enter.
+3. Ввести несколько слов и убедиться, что появился экран результатов с WPM,
+   CPM и точностью.
 
-**Note:** This will install typioca in `$GOBIN`, which defaults to `$GOPATH/bin` or `$HOME/go/bin` if the GOPATH environment variable is not set.
+Протокол проверки: 09.11.2026, Linux amd64, Go 1.25.6, `@gitmaxlla`:
+`make build` и `--version` выполнены. Интерактивный запуск требует настоящего TTY;
+проверка на другой машине пока не проводилась.
 
-### Homebrew
+## Статус требований
 
-```
-brew install typioca
-```
+Полная версия — в [`docs/01-requirements.md`](docs/01-requirements.md).
 
-### Nix
+| Номер | Краткая формулировка | Приоритет | Состояние |
+| --- | --- | --- | --- |
+| FR-1 | Тест на время | обязательно | уже есть |
+| FR-2 | Тест по количеству слов | обязательно | уже есть |
+| FR-3 | Тест по количеству предложений | обязательно | уже есть |
+| FR-4 | Выбор набора и раскладки | обязательно | уже есть |
+| FR-5 | Ввод и исправление текста | обязательно | уже есть |
+| FR-6 | Просмотр результатов | обязательно | уже есть |
+| FR-7 | Управление наборами и раскладками | обязательно | уже есть |
+| FR-8 | Тест через SSH | желательно | уже есть |
+| FR-9 | История результатов | желательно | нужно сделать |
 
-```
-nix-shell -p typioca
-```
+## Синхронизация с upstream
 
-### openSUSE Tumbleweed
-
-```
-zypper install typioca
-```
-
-### Scoop
-
-```
-scoop bucket add extras
-scoop install typioca
-```
-
-### Void Linux
-
-```
-xbps-install typioca
+```bash
+git remote add upstream https://github.com/bloznelis/typioca.git
+git fetch upstream
+git switch master
+git merge upstream/master
+git push origin master
 ```
 
-### Winget
+Конфликты разрешаются вручную; после слияния проверяется `make build-all`.
 
-```
-winget install bloznelis.typioca
-```
+## Документация
 
-### Building from source
-  1. Checkout the code
-  2. `make build`
-  3. `./execs/typioca`
+- [`docs/00-project.md`](docs/00-project.md) — паспорт проекта.
+- [`docs/01-requirements.md`](docs/01-requirements.md) — требования и модели.
+- [`docs/diagrams/`](docs/diagrams/) — исходники и PNG диаграмм.
 
-#### Prerequisites
-  * `make`
-  * `go`
+## Лицензия
 
-## Custom wordlists
-1. Create your word list in a new line separated manner:
-```
-custom
-words
-are
-the
-best
-```
-or in the same JSON format as the official ones:
-```json
-{
-  "metadata" : {
-    "name" : "My words",
-    "size" : 5,
-    "packagedAt" : "1970-01-01T00:00:00Z",
-    "version" : 1
-  },
-  "words": [ "custom", "words", "are", "the", "best" ]
-}
-```
-2. Place your configuration to platform specific location:
-
-| Platform | **User configuration**                                                                     |
-|----------|--------------------------------------------------------------------------------------------|
-| Windows  | `%APPDATA%\typioca\typioca.conf` or `C:\Users\%USER%\AppData\Roaming\typioca\typioca.conf` |
-| Linux    | `$XDG_CONFIG_HOME/typioca/typioca.conf` or `$HOME/.config/typioca/typioca.conf`            |
-| macOS    | `$HOME/Library/Application Support/typioca/typioca.conf`                                   |
-
-Config example (it is [TOML](https://github.com/toml-lang/toml)):
-```toml
-[[words]]
-  name      = "Best hits '22"
-  enabled   = false
-  sentences = false
-  path      = "/home/words/best-hits-22.json"
-[[words]]
-  name      = "Even better hits '23"
-  enabled   = true
-  sentences = false
-  path      = "/home/words/better-hits-23.json"
-```
-3. Use your words!
-![ship it](https://user-images.githubusercontent.com/33397865/176735281-5c2b34cb-5b19-43c1-9954-92c0583c4cc5.png)
-
-**Note:** Notice that custom wordlist controls are greyed-out, personal configuration must be handled via the file only.
-
----
-![1](https://user-images.githubusercontent.com/33397865/176732388-11b66a1e-1d20-420f-a583-5d95241444d6.png)
-![3](https://user-images.githubusercontent.com/33397865/176732403-9c64e277-f533-4bf3-96a5-a26303b37b60.png)
-![2](https://user-images.githubusercontent.com/33397865/176732395-73c6c922-6a0d-4576-90bb-1f77e2c9b065.png)
-![4](https://user-images.githubusercontent.com/33397865/176732415-aac89b54-15d3-4b10-8408-fac997b97085.png)
-
-### Acknowledgments
-Built with [bubbletea](https://github.com/charmbracelet/bubbletea)
-
-🧋
+MIT, Copyright (c) 2022 Lukas Bloznelis. Файл [`LICENSE`](LICENSE) сохранён
+без изменений.

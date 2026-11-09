@@ -1,0 +1,21 @@
+@startuml state-test-session
+skinparam defaultFontName "DejaVu Sans"
+skinparam backgroundColor white
+skinparam shadowing false
+
+[*] --> MainMenu
+MainMenu --> Setup : выбрать режим
+Setup --> Running : Enter, если набор доступен
+Running --> Running : ввод символа
+Running --> Completed : время истекло\nили весь текст введён
+Running --> MainMenu : Ctrl+Q
+Completed --> Results : рассчитать и сохранить
+Results --> Running : Enter или Ctrl+R
+Results --> MainMenu : Ctrl+Q
+MainMenu --> [*] : Esc или Ctrl+C
+
+note right of Setup
+  Если нет включённых наборов,
+  режим недоступен (enabled = false).
+end note
+@enduml

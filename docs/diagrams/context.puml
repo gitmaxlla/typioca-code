@@ -1,0 +1,27 @@
+@startuml context
+skinparam defaultFontName "DejaVu Sans"
+skinparam backgroundColor white
+skinparam shadowing false
+left to right direction
+
+actor "Конечный пользователь" as user
+actor "Автор наборов слов" as author
+actor "Администратор инсталляции" as admin
+
+rectangle "typioca" {
+  [Терминальный интерфейс\n(TUI)] as tui
+  [SSH-сервер] as ssh
+}
+
+cloud "GitHub Raw\n(исходный репозиторий)" as github
+database "Локальные файлы ОС\n(конфигурация, результаты,\nнаборы, раскладки)" as fs
+
+user --> tui : проходит тесты
+author --> fs : добавляет TOML/JSON
+admin --> ssh : запускает serve
+user --> ssh : подключается по SSH
+tui --> fs : читает и пишет
+ssh --> fs : читает и пишет
+tui --> github : синхронизирует наборы\nи раскладки
+ssh --> github : синхронизирует наборы\nи раскладки
+@enduml

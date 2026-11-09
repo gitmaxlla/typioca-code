@@ -1,0 +1,37 @@
+@startuml sequence-word-test
+skinparam defaultFontName "DejaVu Sans"
+skinparam backgroundColor white
+skinparam shadowing false
+autonumber
+
+actor "Конечный пользователь" as User
+participant "Главное меню\n(MainMenu)" as Menu
+participant "Тест по словам\n(WordCountBasedTest)" as Test
+participant "Генератор слов\n(WordsGenerator)" as Gen
+participant "Хранилище результатов\n(results-io)" as Store
+database "results.json" as FS
+
+User -> Menu : выбрать 25 слов, Common words, Enter
+Menu -> Gen : Generate("Common words")
+Gen --> Menu : 25 слов
+Menu -> Test : initWordCountBasedTest()
+User -> Test : первый символ
+Test -> Test : запустить секундомер
+
+loop пока текст не введён
+  User -> Test : символ
+  Test -> Test : добавить в буфер,\nотметить ошибку при несовпадении
+end
+
+Test -> Test : input == wordsToEnter
+Test -> Test : calculateResults()
+Test -> Store : PersistResults(results)
+Store -> FS : записать результат
+Test --> User : экран результатов:\nWPM, CPM, точность, график
+
+note over User, Test
+  25 слов за 30 с без ошибок:
+  WPM = 50, raw WPM = 50,
+  CPM = 250, точность = 100 %
+end note
+@enduml

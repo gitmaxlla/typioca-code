@@ -1,0 +1,38 @@
+@startuml use-cases
+skinparam defaultFontName "DejaVu Sans"
+skinparam backgroundColor white
+skinparam shadowing false
+left to right direction
+
+actor "Конечный пользователь" as user
+actor "Автор наборов слов" as author
+actor "Администратор инсталляции" as admin
+
+rectangle "typioca" {
+  usecase "FR-1\nПройти тест на время" as uc1
+  usecase "FR-2\nПройти тест по количеству слов" as uc2
+  usecase "FR-3\nПройти тест по количеству предложений" as uc3
+  usecase "FR-4\nВыбрать набор и раскладку" as uc4
+  usecase "FR-5\nВводить и исправлять текст" as uc5
+  usecase "FR-6\nПросмотреть результаты теста" as uc6
+  usecase "FR-7\nУправлять наборами и раскладками" as uc7
+  usecase "FR-8\nПройти тест через SSH" as uc8
+}
+
+user --> uc1
+user --> uc2
+user --> uc3
+user --> uc4
+user --> uc5
+user --> uc6
+user --> uc8
+author --> uc7
+admin --> uc8
+
+uc1 ..> uc5 : <<include>>
+uc2 ..> uc5 : <<include>>
+uc3 ..> uc5 : <<include>>
+uc1 ..> uc4 : <<include>>
+uc2 ..> uc4 : <<include>>
+uc3 ..> uc4 : <<include>>
+@enduml

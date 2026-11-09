@@ -1,0 +1,29 @@
+@startuml sequence-sync-error
+skinparam defaultFontName "DejaVu Sans"
+skinparam backgroundColor white
+skinparam shadowing false
+autonumber
+
+actor "Автор наборов" as User
+participant "Экран Config\n(ConfigView)" as Config
+participant "Набор слов\n(WordList)" as WL
+participant "HTTP-клиент\n(words.DownloadFile)" as Client
+participant "GitHub Raw" as GH
+database "Локальный кэш" as FS
+
+User -> Config : выбрать "Dracula words", нажать s
+Config -> WL : toggleSynced()
+WL -> Client : DownloadFile(path, RemoteURI)
+Client -> GH : GET /words/storage/words/dracula.json
+GH --> Client : ошибка сети или 404
+Client --> WL : error
+WL -> WL : syncOK = false,\nsynced не меняется
+WL --> Config : состояние без изменений
+Config --> User : строка набора красная,\nнабор не появился в меню тестов
+
+note over Config, FS
+  Файл не создаётся и не удаляется.
+  Приложение остаётся в Config
+  и не завершается с ошибкой.
+end note
+@enduml

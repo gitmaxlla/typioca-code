@@ -1,0 +1,48 @@
+@startuml class-model
+skinparam defaultFontName "DejaVu Sans"
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+class WordSource {
+  +metadata: Metadata
+  +words: []string
+}
+
+class WordList {
+  +name: string
+  +path: string
+  +remoteURI: string
+  +sentences: bool
+  +enabled: bool
+  +synced: bool
+}
+
+class Layout {
+  +name: string
+  +mappings: map[rune]rune
+}
+
+class TestSession {
+  +testType: string
+  +numericSetting: int
+  +wordListName: string
+  +elapsed: Duration
+  +input: []rune
+  +mistakes: map[int]bool
+}
+
+class TestResult {
+  +wpm: int
+  +cpm: int
+  +accuracy: float
+  +rawWpm: int
+  +deltaWpm: float
+  +wpmEachSecond: []float
+}
+
+WordList o-- WordSource : содержит
+TestSession --> WordList : использует
+TestSession --> Layout : применяет
+TestSession "1" --> "*" TestResult : порождает
+@enduml
