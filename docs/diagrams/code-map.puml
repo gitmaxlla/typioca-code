@@ -1,0 +1,91 @@
+@startuml code-map
+skinparam defaultFontName "DejaVu Sans"
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+skinparam nodesep 14
+skinparam ranksep 22
+top to bottom direction
+
+title typioca — карта кода для разработчика
+
+package "1. Точка входа" as entry {
+  [main.go\nmain()] as main #DDEBF7
+  [cmd/cmd.go\nRootCmd\nserveCmd] as cmd #DDEBF7
+}
+
+package "2. Старт сессии" as boot {
+  [cmd/init.go\ninitialModel()\ninitMainMenu()\ninit*Test()] as init #E2EFDA
+  [cmd/config.go\nReadConfig()\nmergeConfigs()\ncheckSync()\nWriteConfig()] as config #E2EFDA
+  [cmd/words/words.go\nNewGenerator()] as newgen #E2EFDA
+}
+
+package "3. MVU-цикл Bubble Tea" as loop {
+  [cmd/model.go\nmodel{state}\nMainMenu\nConfigView\nTestBase] as model #FFF2CC
+  [cmd/update.go\nUpdate(msg)\nhandleInput()\nhandleRunes()] as update #FFF2CC
+  [cmd/view.go\nView()\nparagraphView()\nplotWpms()] as view #FFF2CC
+}
+
+package "4. Один тест" as test {
+  [WordsGenerator\nGenerate(list)] as gen #FCE4D6
+  [TestBase\nwordsToEnter\ninputBuffer\nmistakes] as base #FCE4D6
+  [cmd/results.go\ncalculateResults()\nWPM / CPM / accuracy] as results #FCE4D6
+  [cmd/results-io.go\nPersistResults()\nReadResults()] as persist #FCE4D6
+}
+
+package "5. Наборы и сеть" as sync {
+  [cmd/update.go\nConfigView\nhandleInput("s")\ntoggleSynced()] as togglesync #E4DFEC
+  [cmd/words/loader.go\nDownloadFile()\nDeleteWordList()] as dl #E4DFEC
+}
+
+database "results.json\n(кэш ОС)" as fsres
+database "typioca.conf\n(JSON в кэше)\n+ TOML в конфиге" as fsconf
+database "words/ и layouts/\n(кэш ОС)" as fscache
+cloud "GitHub Raw\n(upstream)" as gh
+
+' --- запуск ---
+main --> cmd : OsInit()\nRootCmd.Execute()
+cmd --> init : локальный TUI
+cmd --> init : serve (SSH-сессия)
+
+' --- старт ---
+init --> config : ReadConfig()
+init --> newgen : NewGenerator(paths)
+init --> model : начальное состояние
+
+' --- цикл ---
+update --> model : меняет m.state
+model --> view : View() читает m.state
+view ..> base : рисует ввод
+
+' --- ввод и тест ---
+update --> base : руны / пробел /\nBackspace / Ctrl+W
+gen --> base : wordsToEnter []rune
+base --> results : тест завершён
+results --> persist : Results
+persist --> fsres : JSON
+
+' --- конфиг и синхронизация ---
+config --> fsconf : чтение / запись
+config --> fscache : checkSync()
+update --> togglesync : Config: клавиши s / e
+togglesync --> dl : toggleSynced()
+dl --> gh : HTTP GET
+dl --> fscache : файл
+
+note right of model
+  m.state — одно из:
+  MainMenu
+  *TestSettings
+  *Test
+  *Results
+  ConfigView
+end note
+
+note bottom of update
+  Bubble Tea вызывает Update(msg),
+  затем View(). Ветки вычисляются
+  по конкретному типу m.state.
+end note
+@enduml

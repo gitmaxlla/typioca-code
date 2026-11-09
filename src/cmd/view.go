@@ -14,15 +14,17 @@ import (
 	"github.com/muesli/reflow/wordwrap"
 )
 
-var lineLenLimit int
-var minLineLen int = 5
-var maxLineLen int = 40
-var resultsStyle = lipgloss.NewStyle().
-	Align(lipgloss.Center).
-	PaddingTop(1).
-	PaddingBottom(1).
-	PaddingLeft(5).
-	PaddingRight(5)
+var (
+	lineLenLimit int
+	minLineLen   int = 5
+	maxLineLen   int = 40
+	resultsStyle     = lipgloss.NewStyle().
+			Align(lipgloss.Center).
+			PaddingTop(1).
+			PaddingBottom(1).
+			PaddingLeft(5).
+			PaddingRight(5)
+)
 
 func wrapWithCursor(shouldWrap bool, line string, stringStyle StringStyle) string {
 	cursor := " "
@@ -381,16 +383,10 @@ func plotWpms(wpms []float64, width int) string {
 	return lipgloss.NewStyle().Padding(1).Render(wpmGraph)
 }
 
-func averageLineLenFast(lines []string) int {
-	linesLen := len(lines)
-	linesToConsider := int(math.Min(float64(linesLen), 3))
-	return averageStringLen(lines[:linesToConsider])
-}
-
 func averageLineLen(lines []string) int {
 	linesLen := len(lines)
 	if linesLen > 1 {
-		lines = lines[:linesLen-1] //Drop last line, as it might skew up average length
+		lines = lines[:linesLen-1] // Drop last line, as it might skew up average length
 	}
 
 	return averageStringLen(lines)
@@ -496,9 +492,7 @@ func (base *TestBase) colorInput(styles Styles) string {
 	var coloredInput strings.Builder
 
 	if len(mistakes) == 0 {
-
 		coloredInput.WriteString(styleAllRunes(base.inputBuffer, styles.correct))
-
 	} else {
 
 		previousMistake := -1

@@ -18,12 +18,16 @@ Menu -> Test : initWordCountBasedTest()
 User -> Test : первый символ
 Test -> Test : запустить секундомер
 
-loop пока текст не введён
+loop пока текст не введён полностью
   User -> Test : символ
   Test -> Test : добавить в буфер,\nотметить ошибку при несовпадении
 end
 
-Test -> Test : input == wordsToEnter
+note over Test
+  Условие выхода из цикла:
+  input == wordsToEnter
+end note
+
 Test -> Test : calculateResults()
 Test -> Store : PersistResults(results)
 Store -> FS : записать результат

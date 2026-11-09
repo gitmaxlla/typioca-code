@@ -64,6 +64,8 @@ git push origin master
 - [`docs/00-project.md`](docs/00-project.md) — паспорт проекта.
 - [`docs/01-requirements.md`](docs/01-requirements.md) — требования и модели.
 - [`docs/diagrams/`](docs/diagrams/) — исходники и PNG диаграмм.
+- [`docs/diagrams/code-map.png`](docs/diagrams/code-map.png) — карта кода для разработчика.
+- [`docs/demo-1min.md`](docs/demo-1min.md) — сценарий демо на одну минуту.
 
 ## Лицензия
 

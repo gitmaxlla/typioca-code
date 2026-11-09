@@ -4,7 +4,7 @@ skinparam backgroundColor white
 skinparam shadowing false
 autonumber
 
-actor "Автор наборов" as User
+actor "Конечный пользователь" as User
 participant "Экран Config\n(ConfigView)" as Config
 participant "Набор слов\n(WordList)" as WL
 participant "HTTP-клиент\n(words.DownloadFile)" as Client

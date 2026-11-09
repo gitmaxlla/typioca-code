@@ -30,7 +30,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		// Cool, what was the actual key pressed?
 		switch msg.String() {
-
 		// These keys should exit the program.
 		case "ctrl+c", "esc":
 			return m, tea.Quit
@@ -78,7 +77,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				termenv.DefaultOutput().Reset()
 				state.timer.timedout = true
 
-				var results = state.calculateResults()
+				results := state.calculateResults()
 
 				PersistResults(results)
 
@@ -183,7 +182,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					}
 					handleRunes(msg, &state.base, state.mainMenu.config.Layout.Mappings)
 					m.state = state
-
 				}
 			}
 		}
@@ -192,7 +190,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if len(state.base.wordsToEnter) == len(state.base.inputBuffer) {
 			termenv.DefaultOutput().Reset()
 
-			var results = state.calculateResults()
+			results := state.calculateResults()
 
 			PersistResults(results)
 
@@ -268,7 +266,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if len(state.base.wordsToEnter) == len(state.base.inputBuffer) {
 			termenv.DefaultOutput().Reset()
 
-			var results = state.calculateResults()
+			results := state.calculateResults()
 
 			PersistResults(results)
 
@@ -529,7 +527,6 @@ func (settings SentenceCountBasedTestSettings) handleInput(msg tea.Msg, menu Mai
 }
 
 func (configView ConfigView) handleInput(msg tea.Msg, state State) State {
-
 	embedWordListSectionEnd := len(configView.config.EmbededWordLists)
 	wordListSectionEnd := embedWordListSectionEnd + len(configView.config.WordLists)
 	layoutSectionEnd := wordListSectionEnd + len(configView.config.LayoutFiles)
@@ -685,7 +682,7 @@ func (results SentenceCountTestResults) handleInput(msg tea.Msg, state State) St
 func handleBackspace(base *TestBase) {
 	base.inputBuffer = dropLastRune(base.inputBuffer)
 
-	//Delete mistakes
+	// Delete mistakes
 	inputLength := len(base.inputBuffer)
 	_, ok := base.mistakes.mistakesAt[inputLength]
 	if ok {
@@ -700,7 +697,7 @@ func handleCtrlW(base *TestBase) {
 	bufferLen := len(base.inputBuffer)
 	base.cursor = bufferLen
 
-	//Delete mistakes
+	// Delete mistakes
 	var newMistakes map[int]bool = make(map[int]bool, 0)
 	for at := range base.mistakes.mistakesAt {
 		if at < bufferLen {
