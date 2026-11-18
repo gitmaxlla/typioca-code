@@ -6,8 +6,9 @@ on:
       - "*"
     branches:
       - master
+      - main
   pull_request:
-    branches: [master]
+    branches: [master, main]
 
 jobs:
   build:
@@ -17,8 +18,25 @@ jobs:
         working-directory: src
 
     steps:
-      # Build
+      # Test
       - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: src/go.mod
+          cache-dependency-path: src/go.sum
+
+      - name: Download dependencies
+        run: go mod download
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Test
+        run: go test ./...
+
+      # Build
       - name: Build all
         run: make build-all
 
