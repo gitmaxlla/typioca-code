@@ -38,7 +38,9 @@ admin --> uc10
 uc1 ..> uc5 : <<include>>
 uc2 ..> uc5 : <<include>>
 uc3 ..> uc5 : <<include>>
+uc9 ..> uc5 : <<include>>
 uc1 ..> uc4 : <<include>>
 uc2 ..> uc4 : <<include>>
 uc3 ..> uc4 : <<include>>
+uc9 ..> uc4 : <<include>>
 @enduml
