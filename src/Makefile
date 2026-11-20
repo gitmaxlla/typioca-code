@@ -40,6 +40,9 @@ build:  ## Builds the CLI
 	-ldflags "-w -s -X 'github.com/bloznelis/typioca/cmd.Version=${VERSION}'" \
 	-a -tags netgo -o ${OUTPUT_BIN}
 
+test:  ## Runs tests and refreshes tests/coverage.out and tests/README.md
+	@../tests/update-coverage.sh
+
 build-all: build-win-amd build-win-arm build-mac-amd build-mac-arm build-linux-amd ## Builds execs for all architectures
 
 help: ## This message
