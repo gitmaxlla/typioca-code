@@ -1,5 +1,19 @@
 # Журнал изменений
 
+## 1.5 — 20.11.2026
+
+### Изменено
+
+- `.github/workflows/ci.yml`: минимальный workflow — `go vet`, `go test`
+  и `go build ./...` при push и pull request в `master`/`main`.
+- Удалены upstream-workflows AUR, Homebrew и winget, каталог `.github/aur/`
+  и `dependabot.yml`.
+
+### Добавлено
+
+- `.github/workflows/release.yml`: по тегу `lab-*` на `master`/`main`
+  собирает `typioca-linux-amd64` и публикует GitHub Release.
+
 ## 1.4 — 20.11.2026
 
 ### Добавлено

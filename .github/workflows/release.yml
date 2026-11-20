@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "lab-*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: src/go.mod
+          cache-dependency-path: src/go.sum
+
+      - name: Check that tag is on master or main
+        run: |
+          git fetch origin master || true
+          git fetch origin main || true
+          commit=$(git rev-parse "$GITHUB_REF^{commit}")
+          if git merge-base --is-ancestor "$commit" origin/master 2>/dev/null; then
+            echo "Tag $GITHUB_REF_NAME is on master"
+          elif git merge-base --is-ancestor "$commit" origin/main 2>/dev/null; then
+            echo "Tag $GITHUB_REF_NAME is on main"
+          else
+            echo "::error::Tag $GITHUB_REF_NAME is not on master or main"
+            exit 1
+          fi
+
+      - name: Build Linux amd64
+        working-directory: src
+        run: make build-linux-amd
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: typioca ${{ github.ref_name }}
+          body: |
+            Сборка typioca для Linux amd64 из тега ${{ github.ref_name }}.
+          files: src/execs/typioca-linux-amd64

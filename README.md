@@ -75,6 +75,12 @@ make test
 pull request и push в `master`/`main` — см.
 [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
+## Релизы
+
+Тег `lab-*`, указывающий на коммит в `master`/`main`, запускает workflow
+`Release`: собирается `typioca-linux-amd64` и прикрепляется к GitHub Release.
+Workflows upstream (AUR, Homebrew, winget) удалены.
+
 ## Статус требований
 
 Полная версия — в [`docs/01-requirements.md`](docs/01-requirements.md).
