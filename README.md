@@ -76,8 +76,9 @@ winget install bloznelis.typioca
 
 ### Building from source
   1. Checkout the code
-  2. `make build`
-  3. `./execs/typioca`
+  2. `cd src`
+  3. `make build`
+  4. `./execs/typioca`
 
 #### Prerequisites
   * `make`

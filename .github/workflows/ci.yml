@@ -12,6 +12,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src
 
     steps:
       # Build
@@ -24,27 +27,27 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: typioca-win-amd64
-          path: execs/typioca-win-amd64.exe
+          path: src/execs/typioca-win-amd64.exe
       - name: Upload typioca-win-arm64
         uses: actions/upload-artifact@v4
         with:
           name: typioca-win-arm64
-          path: execs/typioca-win-arm64.exe
+          path: src/execs/typioca-win-arm64.exe
       - name: Upload typioca-linux-amd64
         uses: actions/upload-artifact@v4
         with:
           name: typioca-linux-amd64
-          path: execs/typioca-linux-amd64
+          path: src/execs/typioca-linux-amd64
       - name: Upload typioca-mac-amd64
         uses: actions/upload-artifact@v4
         with:
           name: typioca-mac-amd64
-          path: execs/typioca-mac-amd64
+          path: src/execs/typioca-mac-amd64
       - name: Upload typioca-mac-arm64
         uses: actions/upload-artifact@v4
         with:
           name: typioca-mac-arm64
-          path: execs/typioca-mac-arm64
+          path: src/execs/typioca-mac-arm64
 
   release:
     needs: build
