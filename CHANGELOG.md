@@ -49,7 +49,7 @@
 - `src/cmd/config_tui_test.go`: переключение набора слов на экране `Config`
   через `teatest` меняет файл конфигурации; десять переключений подряд
   обрабатываются корректно.
-- `.github/workflows/ci.yml`: `go vet`, `go test` и `make build-all` при pull
+- `.github/workflows/ci.yml`: `go vet`, `go test` и `go build ./...` при pull
   request и push в `master`/`main`.
 - `README.md`: раздел «Тесты» с командами локального запуска.
 
