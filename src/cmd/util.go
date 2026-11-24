@@ -47,15 +47,6 @@ func floor(value int) int32 {
 	return int32(math.Max(0, float64(value)))
 }
 
-func dropLastString(strings []string) []string {
-	le := len(strings)
-	if le != 0 {
-		return strings[:le-1]
-	} else {
-		return strings
-	}
-}
-
 func dropLastRune(runes []rune) []rune {
 	le := len(runes)
 	if le != 0 {
@@ -71,11 +62,4 @@ func toKeysSlice(mp map[int]bool) []int {
 		acc = append(acc, key)
 	}
 	return acc
-}
-
-func reverse(runes []rune) []rune {
-	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
-		runes[i], runes[j] = runes[j], runes[i]
-	}
-	return runes
 }
