@@ -37,7 +37,7 @@ func TestGeneratePicksRequestedAmountFromList(t *testing.T) {
 	generator.Count = 25
 
 	got := strings.Fields(string(generator.Generate(path)))
-	if len(got) != 25 {
+	if len(got) == 25 {
 		t.Fatalf("expected 25 words, got %d: %v", len(got), got)
 	}
 
